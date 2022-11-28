@@ -86,6 +86,23 @@ const userController = {
             )     
             .catch((err) => res.status(500).json(err));
       },
+      // Delete route to remove friend
+      removeFriend(req, res) {
+        // Put to update users friends
+        User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $pull: { friends: req.params.friendId }},
+            { runValidators: true, new: true},
+        )
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ 
+                        message: 'There is no user that matches the requested ID' 
+                    })
+                    : res.status(200).json(user)
+            )     
+            .catch((err) => res.status(500).json(err));
+      }
 }
 
 module.exports = userController;
