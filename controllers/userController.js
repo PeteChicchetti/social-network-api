@@ -48,7 +48,7 @@ const userController = {
                     ? res.status(404).json({ 
                         message: 'There is no user that matches the requested ID' 
                     })
-                    : res.json(user)
+                    : res.status(200).json(user)
             )     
             .catch((err) => res.status(500).json(err));
       },
@@ -66,6 +66,23 @@ const userController = {
                     : Thought.deleteMany(
                         { _id: { $in: user.thoughts }}
                         )
+            )     
+            .catch((err) => res.status(500).json(err));
+      },
+      // Post route to add a friend
+      addFriend(req, res) {
+        // Put to add friend to user
+        User.findOneAndUpdate(
+            { _id: req. params.userId },
+            { $addToSet: { friends: req.body }},
+            { runValidators: true, new: true},
+        )
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ 
+                        message: 'There is no user that matches the requested ID' 
+                    })
+                    : res.status(200).json(user)
             )     
             .catch((err) => res.status(500).json(err));
       },
