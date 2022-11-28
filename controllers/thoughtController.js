@@ -1,4 +1,4 @@
-const { Thought, User } = require('../models/');
+const { Thought, User } = require('../models/')
 
 const thoughtController = {
     // Get all thoughts by .find()
@@ -21,6 +21,26 @@ const thoughtController = {
                         })
                     : res.status(200).json(thoughts)
             )
+            .catch((err) => res.status(500).json(err));
+    },
+    // Post to create a new thought
+    createThought(req, res) {
+        // Create new thought then find and assign to user by id
+        Thought.create(req.body)
+            .then((thought) => {
+                return User.findOneAndUpdate(
+                    { _id: req.body.userId },
+                    { $addToSet: { thoughts: thought._id}},
+                    { new: true }
+                )
+            })
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ 
+                        message: 'Thought created but there is no user that matches the requested ID' 
+                    })
+                    : res.status(200).json(thought)
+            )     
             .catch((err) => res.status(500).json(err));
     }
 }
