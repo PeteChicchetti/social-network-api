@@ -31,7 +31,7 @@ const thoughtController = {
                 return User.findOneAndUpdate(
                     { _id: req.body.userId },
                     { $addToSet: { thoughts: thought._id}},
-                    { new: true }
+                    { new: true },
                 )
             })
             .then((user) =>
@@ -43,6 +43,23 @@ const thoughtController = {
             )     
             .catch((err) => res.status(500).json(err));
     },
+    // Put to update a thought
+    updateThought(req, res) {
+        // Properties to update a single thought
+        Thought.findOneAndUpdate(
+            { _id: req.body.userId },
+            { $addToSet: { thoughts: thought._id}},
+            { runValidators: true, new: true },
+        )
+            .then((thought) =>
+                !thought
+                    ? res.status(404).json({ 
+                        message: 'There is no thought that matches the requested ID' 
+                    })
+                    : res.status(200).json(thought)
+            )     
+            .catch((err) => res.status(500).json(err));
+    }
 }
 
 module.exports = thoughtController;
