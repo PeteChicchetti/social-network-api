@@ -105,6 +105,23 @@ const thoughtController = {
             )     
             .catch((err) => res.status(500).json(err));
     },
+    // Delete route to remove a reaction from a thought
+    removeReaction(req, res) {
+        // Put to update thought
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: { reactionId: req.params.reactionId }}},
+            { runValidators: true, new: true},
+        )
+            .then((thought) =>
+                !thought
+                    ? res.status(404).json({ 
+                        message: 'There is no thought that matches the requested ID' 
+                    })
+                    : res.status(200).json(thought)
+            )     
+            .catch((err) => res.status(500).json(err));
+    }
 }
 
 module.exports = thoughtController;
