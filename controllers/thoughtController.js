@@ -39,10 +39,10 @@ const thoughtController = {
                     ? res.status(404).json({ 
                         message: 'Thought created but there is no user that matches the requested ID' 
                     })
-                    : res.status(200).json(thought)
+                    : res.status(200).json('Added thought to user')
             )     
             .catch((err) => res.status(500).json(err));
-    }
+    },
 }
 
 module.exports = thoughtController;
