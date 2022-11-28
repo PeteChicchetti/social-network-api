@@ -59,7 +59,35 @@ const thoughtController = {
                     : res.status(200).json(thought)
             )     
             .catch((err) => res.status(500).json(err));
-    }
+    },
+    // Delete to delete a thought
+    deleteThought(req, res) {
+        // Delete a single thought by id
+        Thought.findOneAndRemove(
+            { _id: req.params.thoughtId}
+        )
+        .then((thought) => 
+            !thought
+                ? res.status(404).json({ 
+                    message: 'There is no thought that matches the requested ID' 
+                })
+                : User.findOneAndUpdate(
+                    { thoughts: req.params.thoughtId },
+                    { $pull: { thoughts: req.params.thoughtId } },
+                    { new: true },
+                )
+        )
+        .then((user) => 
+            !user
+                ? res.status(404).json({
+                    message: 'Thought deleted but there is no user that matches the requested ID'
+                })
+                : res.json(200).json({ 
+                    message: 'The thought had been deleted!' 
+                })
+        )     
+        .catch((err) => res.status(500).json(err));
+    },
 }
 
 module.exports = thoughtController;
