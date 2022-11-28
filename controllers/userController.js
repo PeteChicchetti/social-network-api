@@ -4,12 +4,10 @@ const userController = {
     // Get all Users by .find()
     getUsers(req, res) {
         User.find()
-            .then((users) => {
-                return res.status(200).json(users);
-        })
-            .catch((err) => {
-                return res.status(500).json(err);
-        });
+            .then((users) => 
+                res.status(200).json(users))
+            .catch((err) => 
+                res.status(500).json(err));
     },
     // Get singleUser by .findOne()
     getSingleUser(req, res) {
@@ -21,7 +19,9 @@ const userController = {
           .populate('thoughts')
           .then((user) =>
             !user
-              ? res.status(404).json({ message: 'There is no user that matches the requested ID' })
+              ? res.status(404).json({ 
+                    message: 'There is no user that matches the requested ID' 
+                })
               : res.status(200).json(user)
           )
           .catch((err) => res.status(500).json(err));
@@ -30,11 +30,11 @@ const userController = {
       createUser(req, res) {
         // Create new user using req.body from post
         User.create(req.body)
-            .then((users) => {
-                return res.status(200).json(users);
-            })
-            .catch((err) => {
-                return res.status(500).json(err);
-            });
+            .then((user) => 
+                res.status(200).json(user))
+            .catch((err) => 
+                res.status(500).json(err));
       },
 }
+
+module.exports = userController;
