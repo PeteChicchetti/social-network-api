@@ -69,13 +69,12 @@ const userController = {
             )     
             .catch((err) => res.status(500).json(err));
       },
-      // Post route to add a friend
+      // Put route to add a friend
       addFriend(req, res) {
         // Put to add friend to user
         User.findOneAndUpdate(
             { _id: req.params.userId },
-            { $addToSet: { friends: req.body }},
-            { runValidators: true, new: true},
+            { $addToSet: { friends: req.params.friendId }},
         )
             .then((user) =>
                 !user
@@ -92,7 +91,6 @@ const userController = {
         User.findOneAndUpdate(
             { _id: req.params.userId },
             { $pull: { friends: req.params.friendId }},
-            { runValidators: true, new: true},
         )
             .then((user) =>
                 !user
