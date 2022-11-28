@@ -35,6 +35,24 @@ const userController = {
             .catch((err) => 
                 res.status(500).json(err));
       },
+      // Put to update a user
+      updateUser(req, res) {
+        // Properties to update single user
+        User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $set: req.body },
+            { runValidators: true, new: true }
+        )
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ 
+                        message: 'There is no user that matches the requested ID' 
+                    })
+                    : res.json(user)
+            )     
+            .catch((err) => res.status(500).json(err));
+      },
+      
 }
 
 module.exports = userController;
