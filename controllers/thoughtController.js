@@ -47,8 +47,8 @@ const thoughtController = {
     updateThought(req, res) {
         // Properties to update a single thought
         Thought.findOneAndUpdate(
-            { _id: req.body.userId },
-            { $addToSet: { thoughts: thought._id}},
+            { _id: req.params.thoughtId },
+            { $set: req.body },
             { runValidators: true, new: true },
         )
             .then((thought) =>
